@@ -13,12 +13,16 @@ spec: # Deployment的规则说明
       args:
         - /bin/sh
         - -c
-        # 启动进程首先创建文件
+        # 启动进程首先创建文件 -> 30s后删除
         - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+      # 执行Liveness探测
       livenessProbe:
         exec:
           command:
+            # 通过cat命令检查文件是否存在
             - cat
             - /tmp/healthy
+        # 容器启动10s后开始Liveness探测
         initialDelaySeconds: 10
+        # 每5s执行一次Liveness探测；若连续3次探测失败，则kill并重启容器
         periodSeconds: 5
