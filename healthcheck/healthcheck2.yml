@@ -1,0 +1,24 @@
+# healthcheck2.yml
+apiVersion: v1 # 版本
+kind: Pod  # 资源类型
+metadata: # 资源的元数据，name是必填项
+  labels:
+    test: liveness
+  name: liveness
+spec: # Deployment的规则说明
+  restartPolicy: OnFailure
+  containers:
+    - name: liveness
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        # 启动进程首先创建文件
+        - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+      livenessProbe:
+        exec:
+          command:
+            - cat
+            - /tmp/healthy
+        initialDelaySeconds: 10
+        periodSeconds: 5

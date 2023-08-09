@@ -1,0 +1,16 @@
+# healthcheck.yml
+apiVersion: v1 # 版本
+kind: Pod  # 资源类型
+metadata: # 资源的元数据，name是必填项
+  labels:
+    test: healthcheck
+  name: healthcheck
+spec: # Deployment的规则说明
+  restartPolicy: OnFailure
+  containers:
+    - name: healthcheck
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        - sleep 10; exit 1  # 模拟容器启动10秒后发生故障

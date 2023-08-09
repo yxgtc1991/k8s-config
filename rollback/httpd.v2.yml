@@ -1,4 +1,4 @@
-# httpd.v1.yml
+# httpd.v2.yml
 apiVersion: apps/v1 # 版本
 kind: Deployment  # 资源类型
 metadata: # 资源的元数据，name是必填项
