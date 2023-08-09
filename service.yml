@@ -1,0 +1,12 @@
+apiVersion: v1  # Service的apiVersion
+kind: Service # 指明当前资源类型是Service
+metadata:
+  name: httpd-svc
+spec:
+  type: NodePort
+  selector: # 挑选 label为run: httpd的Pod作为Service的后端
+    run: httpd
+  ports:  # 将Service的8080端口映射到Pod的80端口，使用TCP协议
+    - protocol: TCP
+      port: 8080
+      targetPort: 80

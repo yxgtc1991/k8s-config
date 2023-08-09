@@ -1,0 +1,36 @@
+apiVersion: apps/v1 # 版本
+kind: Deployment  # 资源类型
+metadata: # 资源的元数据，name是必填项
+  name: my-httpd-2
+  namespace: kube-public
+spec: # Deployment的规则说明
+  selector:
+    matchLabels:
+      app: my-httpd-2
+  replicas: 3 # 副本数
+  template: # Pod 模板
+    metadata: # Pod 元数据
+      labels:
+        app: my-httpd-2
+        run: httpd-2
+    spec: # Pod 规格，定义 Pod 中每个容器的属性，name 和 image 必填
+      containers:
+      - name: my-httpd-2
+        image: httpd
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1  # Service的apiVersion
+kind: Service # 指明当前资源类型是Service
+metadata:
+  name: httpd-svc-2
+  namespace: kube-public
+spec:
+  selector: # 挑选 label为run: httpd的Pod作为Service的后端
+    run: httpd-2
+  ports:  # 将Service的8080端口映射到Pod的80端口，使用TCP协议
+    - protocol: TCP
+      port: 8080
+      targetPort: 80

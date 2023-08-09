@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: node-prometheus
+  template:
+    metadata:
+      labels:
+        app: node-prometheus
+        run: prometheus  # label是run:httpd，Service用这个label挑选Pod
+    spec:
+      hostNetwork: true
+      containers:
+      - name: node-prometheus
+        image: prom/prometheus
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 9090
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+        - name: sys
+          mountPath: /host/sys
+        - name: root
+          mountPath: /rootfs
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: root
+        hostPath:
+          path: /

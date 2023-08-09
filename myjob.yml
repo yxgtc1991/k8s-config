@@ -1,0 +1,16 @@
+apiVersion: batch/v1  # 当前Job的apiVersion
+kind: CronJob  # 指明当前资源的类型
+metadata:
+  name: myjob
+spec:
+  schedule: "*/1 * * * *" # Linux cron，每分钟启动1次
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            command: ["echo", "hello k8s job! "]
+          # 什么情况下需要重启容器（Job：Never或OnFailure；Deployment：Always）
+          restartPolicy: Never
