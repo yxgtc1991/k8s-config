@@ -1,0 +1,47 @@
+# healthcheck_scaleup.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      name: web
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: httpd
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            # 判断 http 请求的返回码是否在200-400之间
+            # 探测路径：http://[container_ip]:8080/healthy
+            httpGet:
+              port: 8080
+              scheme: HTTP
+              path: /healthy
+            # 容器启动10s后开始探测
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80

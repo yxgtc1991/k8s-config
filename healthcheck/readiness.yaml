@@ -1,0 +1,27 @@
+# readiness.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness
+  labels:
+    app: readiness
+spec:
+  containers:
+    - name: readiness
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+      readinessProbe:
+        exec:
+          command:
+            - cat
+            - /tmp/healthy
+        # 刚被创建时，READY状态不可用
+        # 15s（initialDelaySeconds + periodSeconds）后，第1次进行 Readiness 探测并成功返回
+        # 30s后，/tmp/healthy 被删除，连续3次 Readiness 探测均失败后，READY被设置为不可用
+        initialDelaySeconds: 10
+        periodSeconds: 5
+  restartPolicy: OnFailure
+  

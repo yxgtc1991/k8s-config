@@ -1,4 +1,4 @@
-# healthcheck2.yml
+# liveness.yml
 apiVersion: v1 # 版本
 kind: Pod  # 资源类型
 metadata: # 资源的元数据，name是必填项
