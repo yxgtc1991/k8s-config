@@ -1,0 +1,20 @@
+# nfs-pv1.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv1
+spec:
+  # 指定PV的容量为1G
+  capacity:
+    storage: 1Gi
+  # 指定访问模式
+  accessModes:
+    - ReadWriteOnce
+  # 指定PV的回收策略：需要管理员手动回收
+  persistentVolumeReclaimPolicy: Recycle
+  # 为PV设置分类，PVC可以申请相应分类的PV
+  storageClassName: nfs
+  nfs:
+    # 指定PV在NFS服务器上对应的目录
+    path: /Users/mac/nfs-share/pv1
+    server: 192.168.0.0

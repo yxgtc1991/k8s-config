@@ -1,0 +1,23 @@
+# pod1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod1
+  labels:
+    app: mypod1
+spec:
+  containers:
+    - name: mypod1
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        - sleep 30000
+      volumeMounts:
+        - mountPath: "/mydata"
+          name: mydata
+  volumes:
+    - name: mydata
+      # 指定使用mypvc1申请的Volume
+      persistentVolumeClaim:
+        claimName: mypvc1
