@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  labels:
+    app: mypod
+spec:
+  containers:
+    - name: mypod
+      image: busybox
+      args:
+        - /bin/sh
+        - -c
+        - sleep 10; touch /tmp/healthy; sleep 30000
+      volumeMounts:
+        # 将volume mount到容器的/etc目录
+        - mountPath: /etc
+          name: foo
+  volumes:
+    - name: foo
+      configMap:
+        name: myconfigmap
+        items:
+          - key: logging.conf
+            # 在volume中指定存放配置信息的文件相对路径为myapp/logging.conf
+            path: myapp/logging.conf
+  
