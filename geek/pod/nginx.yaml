@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  shareProcessNamespace: true # Pod 内容器共享 PID Namespace
+  containers:
+    - name: nginx
+      image: nginx
+    - name: shell
+      image: busybox
+      stdin: true
+      tty: true

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: two-containers
+  labels:
+    app: two-containers
+spec:
+  restartPolicy: Never
+  volumes:
+    - name: shared-data # debian-container 和 nginx-container 都声明挂载 shared-data 这个 Volume
+      hostPath:
+        path: /data # hostPath 类型，对应宿主机的目录：/data，即同时被绑定挂载至两个容器（宿主机目录不存在 -> 自动创建）
+  containers:
+    - name: nginx-container
+      image: nginx
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: shared-data
+    - name: debian-container
+      image: debian
+      volumeMounts:
+        - mountPath: /pod-data
+          name: shared-data
+      command: ["/bin/sh"]
+      args: ["-c", "echo hello from the debian container > /pod-data/index.html"]

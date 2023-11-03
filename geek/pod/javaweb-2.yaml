@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: javaweb-2
+  labels:
+    app: javaweb-2
+spec:
+  initContainers: # 按顺序优先启动
+    - name: war
+      image: geektime/sample:v2
+      command: ["cp", "/sample.war", "/app"]
+      volumeMounts:
+        - mountPath: /app
+          name: app-volume
+  containers:
+    - name: tomcat
+      image: geektime/tomcat:7.0
+      command: ["sh", "-c", "/root/apache-tomcat-7.0.42-v2/bin/start.sh"]
+      volumeMounts:
+        - mountPath: /root/apache-tomcat-7.0.42-v2/webapps
+          name: app-volume
+      ports:
+        - containerPort: 8080
+          hostPort: 8001
+  volumes:
+    - name: app-volume
+      emptyDir:
+        {}
