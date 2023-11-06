@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: mynamespace
+  name: sa-token-test
+  labels:
+    app: sa-token-test
+spec:
+  containers:
+    - name: sa-token-test
+      image: nginx:1.7.9
+  serviceAccountName: example-sa  # 使用 ServiceAccount
