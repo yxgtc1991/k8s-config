@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello
+  labels:
+    app: hello
+spec:
+  schedule: "*/1 * * * *" # 每分钟执行 1 次
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo hello from the kubenetes cluster
+          restartPolicy: OnFailure

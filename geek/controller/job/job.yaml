@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+  labels:
+    app: pi
+spec:
+  parallelism: 2  # 最大并行数
+  completions: 4  # 最小完成数
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: resouer/ubuntu-bc
+          command: ["sh", "-c", "echo 'scale=10000; 4*a(1)' | bc -l "]
+      restartPolicy: Never  # 离线计算的 Pod 永远都不应该被重启
+  backoffLimit: 4 # 重试次数
