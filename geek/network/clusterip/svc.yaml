@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hostnames
+spec:
+  selector: # 被 selector 选中的 Pod，就是 Service 的 Endpoints
+    app: hostnames  # Service 只代理携带 app=hostnames 标签的 Pod
+  ports:  # Service 的 80 端口，代理 Pod 的 9376 端口
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
